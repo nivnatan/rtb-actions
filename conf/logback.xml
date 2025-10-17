@@ -1,0 +1,126 @@
+<included>
+
+    <appender name="RtbTasksLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../log/tasks.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../log/tasks_%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>1MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger[%M] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DBLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../log/db.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../log/db_%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>1MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger[%M] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DaoLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../log/dao.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../log/dao_%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>1MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="AkkaLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../log/akka.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../log/akka_%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>1MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger[%M] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ErrorLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../log/error_log.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../log/error_log_%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>1MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger[%M] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <appender name="CountersLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../log/counters.dat</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../log/counters_%i.dat</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>1MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.rtb.tasks" level="DEBUG" additivity="false">
+        <appender-ref ref="RtbTasksLoggerAppender" />
+    </logger>
+
+    <logger name="com.common.clients.db" level="INFO" additivity="false">
+        <appender-ref ref="DBLoggerAppender" />
+    </logger>
+
+    <logger name="com.common.dao" level="INFO" additivity="false">
+        <appender-ref ref="DaoLoggerAppender" />
+    </logger>
+
+    <logger name="akka" level="INFO" additivity="false">
+        <appender-ref ref="AkkaLoggerAppender" />
+    </logger>
+
+    <logger name="com.common.utils.counters.CountersActor" level="INFO" additivity="false">
+        <appender-ref ref="CountersLoggerAppender" />
+    </logger>
+
+    <root level="ERROR" >
+        <appender-ref ref="ErrorLoggerAppender" />
+    </root>
+
+</included>

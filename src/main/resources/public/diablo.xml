@@ -1,0 +1,48 @@
+<VAST version="4.0">
+    <Ad id="cfd3c039-387b-4269-a727-8f0126fb6f37">
+        <InLine>
+            <AdSystem>AdTest</AdSystem>
+            <AdTitle>276383</AdTitle>
+            <AdVerifications />
+            <Impression>
+            </Impression>
+            <Creatives>
+                <Creative>
+                    <Linear>
+                        <Duration>00:00:30</Duration>
+                        <MediaFiles>
+                            <MediaFile width="360" height="640" type="video/mp4" bitrate="1040" delivery="progressive" scalable="true" maintainAspectRatio="true">
+                                <![CDATA[https://serving.rtb-smartbidding.com/vid/diablo.mp4?k=3287498237498221]]>
+                            </MediaFile>
+                        </MediaFiles>
+                        <TrackingEvents>
+                            <Tracking event="creativeView">
+                            </Tracking>
+                            <Tracking event="complete">
+                            </Tracking>
+                        </TrackingEvents>
+                        <VideoClicks>
+                            <ClickThrough>
+                                <![CDATA[https://apps.apple.com/US/app/id1492005122?ls=1&mt=8]]>
+                            </ClickThrough>
+                        </VideoClicks>
+                    </Linear>
+                </Creative>
+                <Creative>
+                    <CompanionAds>
+                        <Companion assetWidth="540" assetHeight="960" width="320" height="480">
+                            <StaticResource creativeType="image/jpeg">
+                                <![CDATA[https://serving.rtb-smartbidding.com/img/diablo.jpg?k=3287498237498221]]>
+                            </StaticResource>
+                            <CompanionClickThrough>
+                                <![CDATA[https://apps.apple.com/US/app/id1492005122?ls=1&mt=8]]>
+                            </CompanionClickThrough>
+                            <CompanionClickTracking>
+                            </CompanionClickTracking>
+                        </Companion>
+                    </CompanionAds>
+                </Creative>
+            </Creatives>
+        </InLine>
+    </Ad>
+</VAST>
