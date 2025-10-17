@@ -1,10 +1,10 @@
 <included>
 
-    <appender name="RtbTasksLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>../log/tasks.log</file>
+    <appender name="RtbAdminLoggerAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../log/admin.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>../log/tasks_%i.log</fileNamePattern>
+            <fileNamePattern>../log/admin_%i.log</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>5</maxIndex>
         </rollingPolicy>
@@ -99,8 +99,8 @@
         </encoder>
     </appender>
 
-    <logger name="com.rtb.tasks" level="DEBUG" additivity="false">
-        <appender-ref ref="RtbTasksLoggerAppender" />
+    <logger name="com.rtb.admin" level="DEBUG" additivity="false">
+        <appender-ref ref="RtbAdminLoggerAppender" />
     </logger>
 
     <logger name="com.common.clients.db" level="INFO" additivity="false">

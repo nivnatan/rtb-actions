@@ -1,5 +1,5 @@
 lazy val commonSettings = Seq(
-  name := "rtb-admin",
+  name := "rtb-actions",
   version := "1.0",
   scalaVersion := "2.13.6"
 )
@@ -9,7 +9,7 @@ lazy val common = ProjectRef(file("../common"), "common")
 lazy val root = (project in file(".")).dependsOn(common)
   .settings(
     commonSettings,
-    name := "rtb-admin",
+    name := "rtb-actions",
     libraryDependencies ++= {
       val akkaVersion = "2.6.3"
       val akkaHttpV = "10.1.11"
