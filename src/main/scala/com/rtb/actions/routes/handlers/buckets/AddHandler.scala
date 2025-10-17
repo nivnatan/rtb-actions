@@ -42,7 +42,6 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
     }
   }
 
-
   private def _add(bucketId: Long, bucketValues: Set[String]): Try[AddOutcome] = {
     rtbDb.withTransaction { conn =>
       val psInsert = conn.prepareStatement(
@@ -58,7 +57,6 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
         val results = psInsert.executeBatch()
         val insertedCount = results.count(_ > 0)
 
-        // ✅ Fetch total count after insert
         val psCount = conn.prepareStatement(
           "SELECT COUNT(*) FROM rtb_bucket_values WHERE bucket_id = ?"
         )
