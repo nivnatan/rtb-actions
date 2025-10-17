@@ -3,12 +3,13 @@ package com.rtb.actions.routes.error
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.StatusCodes.BadRequest
 import akka.http.scaladsl.server.Directives.{complete, extractRequest}
-import akka.http.scaladsl.server.{RejectionError, Route}
+import akka.http.scaladsl.server.Route
 import com.common.routes.MyRouteErrorHandler
 import com.common.utils.logging.LoggingSupport
 import com.rtb.actions.config.ConfigSupport
 import com.rtb.actions.routes.actions.models.ActionError
 import com.rtb.actions.utils.counters.Counters.RtbActionsRouteErrorsCount
+import ActionErrorOps._
 
 /**
   * Created by Niv on 11/12/2021
@@ -18,7 +19,7 @@ trait ActionErrorHandler extends MyRouteErrorHandler with LoggingSupport {
   this: ConfigSupport =>
 
   override protected def onError(err: Throwable): Route = {
-    onError(err)
+    onError(err.toActionError)
   }
 
   protected def onError(err: ActionError): Route = {

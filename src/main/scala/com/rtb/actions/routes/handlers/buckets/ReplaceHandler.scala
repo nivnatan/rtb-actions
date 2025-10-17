@@ -11,7 +11,7 @@ import scala.util.{Failure, Success, Try}
 /**
  * Created by Niv on 17/10/2025
  */
-class BucketsReplaceHandler(val config: Config) extends ActionHandler with ConfigSupport {
+class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSupport {
 
   def handle(adminRequest: ActionRequest): ActionResult = {
     (for {
