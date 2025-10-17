@@ -1,7 +1,7 @@
-package com.rtb.admin.routes.rejections
+package com.rtb.actions.routes.rejections
 
-import com.rtb.admin.constants.ActionRejectionTypes.ActionRejectionType
-import com.rtb.admin.routes.actions.models.ActionRequest
+import com.rtb.actions.constants.ActionRejectionTypes.ActionRejectionType
+import com.rtb.actions.routes.actions.models.ActionRequest
 
 /**
  * Created by Niv on 12/01/2024

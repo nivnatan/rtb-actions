@@ -1,4 +1,4 @@
-package com.rtb.admin.routes.error
+package com.rtb.actions.routes.error
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.StatusCodes.InternalServerError
@@ -6,8 +6,8 @@ import akka.http.scaladsl.server.Directives.{complete, extractRequest}
 import akka.http.scaladsl.server.Route
 import com.common.routes.MyRouteErrorHandler
 import com.common.utils.logging.LoggingSupport
-import com.rtb.admin.config.ConfigSupport
-import com.rtb.admin.utils.counters.Counters.RtbActionsRouteErrorsCount
+import com.rtb.actions.config.ConfigSupport
+import com.rtb.actions.utils.counters.Counters.RtbActionsRouteErrorsCount
 import scala.util.Try
 
 /**

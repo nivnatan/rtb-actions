@@ -1,9 +1,9 @@
-package com.rtb.admin.routes.handlers
+package com.rtb.actions.routes.handlers
 
-import com.rtb.admin.config.Config
-import com.rtb.admin.constants.Actions.{Action, BucketAdd, BucketReplace}
-import com.rtb.admin.routes.actions.models.{ActionRequest, ActionResult}
-import com.rtb.admin.routes.handlers.buckets.BucketsReplaceHandler
+import com.rtb.actions.config.Config
+import com.rtb.actions.constants.Actions.{Action, BucketAdd, BucketReplace}
+import com.rtb.actions.routes.actions.models.{ActionRequest, ActionResult}
+import com.rtb.actions.routes.handlers.buckets.BucketsReplaceHandler
 
 /**
  * Created by Niv on 29/04/2022

@@ -1,4 +1,4 @@
-package com.rtb.admin
+package com.rtb.actions
 
 import akka.http.scaladsl.server.Rejection
 import scala.language.implicitConversions

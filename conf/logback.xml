@@ -99,7 +99,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.rtb.admin" level="DEBUG" additivity="false">
+    <logger name="com.rtb.actions" level="DEBUG" additivity="false">
         <appender-ref ref="RtbAdminLoggerAppender" />
     </logger>
 

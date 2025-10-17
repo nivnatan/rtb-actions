@@ -1,4 +1,4 @@
-package com.rtb.admin.config
+package com.rtb.actions.config
 
 import akka.actor.{ActorContext, ActorSystem, Scheduler}
 import com.common.clients.db.{Database, MySqlDatabase}
@@ -8,8 +8,8 @@ import com.common.rtb.constants.RtbConstants
 import com.common.rtb.dao.{RtbDao, RtbDaoDatabase}
 import com.common.utils.counters.{CountersBuilder, CountersHandler, CountersListenerFluentd}
 import com.common.utils.http.models.HostData
-import com.rtb.admin.ActionsServer
-import com.rtb.admin.utils.counters.Counters
+import com.rtb.actions.ActionsServer
+import com.rtb.actions.utils.counters.Counters
 
 import scala.concurrent.ExecutionContext
 

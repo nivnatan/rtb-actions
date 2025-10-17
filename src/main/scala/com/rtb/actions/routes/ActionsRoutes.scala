@@ -1,8 +1,8 @@
-package com.rtb.admin.routes
+package com.rtb.actions.routes
 
 import akka.http.scaladsl.server.Route
-import com.rtb.admin.config.Config
-import com.rtb.admin.routes.actions.ActionsRoute
+import com.rtb.actions.config.Config
+import com.rtb.actions.routes.actions.ActionsRoute
 
 /**
   * Created by niv on 12/13/2021

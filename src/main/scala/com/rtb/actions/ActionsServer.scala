@@ -1,4 +1,4 @@
-package com.rtb.admin
+package com.rtb.actions
 
 import java.net.InetSocketAddress
 import akka.actor.SupervisorStrategy.Stop
@@ -7,8 +7,8 @@ import akka.http.scaladsl.Http
 import com.common.config.ServerConfiguration
 import com.common.utils.ActorApp
 import com.common.utils.logging.LoggingSupport
-import com.rtb.admin.config.Config
-import com.rtb.admin.routes.ActionsRoutes
+import com.rtb.actions.config.Config
+import com.rtb.actions.routes.ActionsRoutes
 import scala.concurrent.ExecutionContext
 import akka.pattern.pipe
 
