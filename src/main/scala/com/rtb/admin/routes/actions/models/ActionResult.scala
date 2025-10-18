@@ -1,4 +1,4 @@
-package com.rtb.actions.routes.actions.models
+package com.rtb.admin.routes.actions.models
 import akka.http.scaladsl.server.Rejection
 
 /**

@@ -1,8 +1,8 @@
-package com.rtb.actions.routes.actions.models
+package com.rtb.admin.routes.actions.models
 
 import com.common.utils.logging.DebugContext
 import com.common.utils.time.MyTime
-import com.rtb.actions.constants.Actions.Action
+import com.rtb.admin.routes.actions.constants.Actions.Action
 
 /**
  * Created by Niv on 11/12/2021

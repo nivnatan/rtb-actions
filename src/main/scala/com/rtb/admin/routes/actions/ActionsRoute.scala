@@ -1,4 +1,4 @@
-package com.rtb.actions.routes.actions
+package com.rtb.admin.routes.actions
 
 import akka.http.scaladsl.server.Directives.{as, authenticateBasicAsync, entity, pathPrefix}
 import akka.http.scaladsl.server.{Directive1, Route}
@@ -6,15 +6,16 @@ import akka.http.scaladsl.server.directives.BasicDirectives
 import com.common.routes.isDebug
 import com.common.utils.http.HttpUtil
 import com.common.utils.time.MyLocalDateTime
-import com.rtb.actions.config.{Config, ConfigSupport}
-import com.rtb.actions.routes.actions.models.{ActionError, ActionRequest, ActionResult, ActionSuccess}
-import com.rtb.actions.routes.error.ActionErrorHandler
+import com.rtb.admin.config.{Config, ConfigSupport}
+import com.rtb.admin.routes.actions.models.{ActionError, ActionRequest, ActionResult, ActionSuccess}
 import akka.http.scaladsl.server.Directives._
-import com.rtb.actions.constants.ActionErrors.UnknownActionType
-import com.rtb.actions.constants.Actions.Action
-import com.rtb.actions.constants.Actions
-import com.rtb.actions.routes.handlers.ActionHandlers
-import com.rtb.actions.utils.counters.Counters.RtbActionsRouteRequestsCount
+import com.rtb.admin.routes.actions.constants.ActionErrors.UnknownActionType
+import com.rtb.admin.routes.actions.constants.Actions
+import com.rtb.admin.routes.actions.constants.Actions.Action
+import com.rtb.admin.routes.actions.error.ActionErrorHandler
+import com.rtb.admin.routes.actions.handlers.ActionHandlers
+import com.rtb.admin.utils.counters.Counters.RtbActionsRouteRequestsCount
+
 import scala.util.{Failure, Success, Try}
 
 /**

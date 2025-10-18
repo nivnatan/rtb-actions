@@ -1,4 +1,4 @@
-package com.rtb.actions.utils.counters
+package com.rtb.admin.utils.counters
 
 import com.common.utils.counters.Counter
 

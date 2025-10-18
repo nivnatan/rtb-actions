@@ -1,4 +1,4 @@
-package com.rtb.actions
+package com.rtb.admin
 
 import java.net.InetSocketAddress
 import akka.actor.SupervisorStrategy.Stop
@@ -7,30 +7,30 @@ import akka.http.scaladsl.Http
 import com.common.config.ServerConfiguration
 import com.common.utils.ActorApp
 import com.common.utils.logging.LoggingSupport
-import com.rtb.actions.config.Config
-import com.rtb.actions.routes.ActionsRoutes
+import com.rtb.admin.config.Config
+import com.rtb.admin.routes.AdminRoutes
 import scala.concurrent.ExecutionContext
 import akka.pattern.pipe
 
 /**
   * Created by Niv on 11/12/2021
   */
-object ActionsServer extends ActorApp {
+object AdminServer extends ActorApp {
 
   override def manager: Props = {
     val interface = ServerConfiguration.Interface
     val port      = ServerConfiguration.Port
     Props(
-      new ActionsServer(interface, port)
+      new AdminServer(interface, port)
     )
   }
 }
 
-class ActionsServer(interface: String, port: Int) extends Actor with LoggingSupport with ActionsRoutes {
+class AdminServer(interface: String, port: Int) extends Actor with LoggingSupport with AdminRoutes {
 
   implicit protected val system: ActorSystem           = context.system
   implicit protected val ec: ExecutionContext          = context.dispatcher
-  implicit protected val classLoader: ClassLoader      = ActionsServer.getClass.getClassLoader
+  implicit protected val classLoader: ClassLoader      = AdminServer.getClass.getClassLoader
 
   protected val config                                 = Config(context)
 

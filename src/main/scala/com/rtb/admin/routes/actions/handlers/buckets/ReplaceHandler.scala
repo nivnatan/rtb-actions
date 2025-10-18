@@ -1,11 +1,11 @@
-package com.rtb.actions.routes.handlers.buckets
+package com.rtb.admin.routes.actions.handlers.buckets
 
 import com.common.utils.http.HttpUtil
-import com.rtb.actions.config.{Config, ConfigSupport}
-import com.rtb.actions.routes.actions.models.{ActionRequest, ActionResult, ActionSuccess}
+import com.rtb.admin.config.{Config, ConfigSupport}
+import com.rtb.admin.routes.actions.models.{ActionRequest, ActionResult, ActionSuccess}
 import com.common.utils.types.TypesUtil._
-import com.rtb.actions.constants.ActionErrors.BucketsErrorTypes.{InvalidBucketParameters, SqlBucketError}
-import com.rtb.actions.routes.handlers.ActionHandler
+import com.rtb.admin.routes.actions.constants.ActionErrors.BucketsErrorTypes.{InvalidBucketParameters, SqlBucketError}
+import com.rtb.admin.routes.actions.handlers.ActionHandler
 import scala.util.{Failure, Success, Try}
 
 /**

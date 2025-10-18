@@ -1,8 +1,8 @@
-package com.rtb.actions.routes.error
+package com.rtb.admin.routes.actions.error
 
 import akka.http.scaladsl.server.RejectionError
-import com.rtb.actions.constants.ActionErrors.UnknownActionError
-import com.rtb.actions.routes.actions.models.ActionError
+import com.rtb.admin.routes.actions.constants.ActionErrors.UnknownActionError
+import com.rtb.admin.routes.actions.models.ActionError
 import scala.util.control.NonFatal
 
 /**

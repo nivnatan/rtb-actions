@@ -1,7 +1,6 @@
-package com.rtb.actions
+package com.rtb.admin.routes.actions
 
-import akka.http.scaladsl.server.Rejection
-import com.rtb.actions.routes.actions.models.ActionError
+import com.rtb.admin.routes.actions.models.ActionError
 
 import scala.language.implicitConversions
 
