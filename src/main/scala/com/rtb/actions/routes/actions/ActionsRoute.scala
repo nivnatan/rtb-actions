@@ -52,7 +52,7 @@ case class ActionsRoute(config: Config) extends ConfigSupport with ActionErrorHa
 
     response match {
       case Success(ActionSuccess(payloadJson)) =>
-        val body = s"""{"status":1","data":$payloadJson}"""
+        val body = s"""{"status":1,"data":$payloadJson}"""
         info(body)
         complete(body)
 
