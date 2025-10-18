@@ -15,7 +15,6 @@ import com.rtb.admin.routes.actions.constants.Actions.Action
 import com.rtb.admin.routes.actions.error.ActionErrorHandler
 import com.rtb.admin.routes.actions.handlers.ActionHandlers
 import com.rtb.admin.utils.counters.Counters.RtbActionsRouteRequestsCount
-
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -27,7 +26,7 @@ case class ActionsRoute(config: Config) extends ConfigSupport with ActionErrorHa
 
   lazy val route: Route = {
     withErrorSupport {
-      pathPrefix("actions" / Segment) { action =>
+      pathPrefix("admin" / "actions" / Segment) { action =>
         authenticateBasicAsync(realm = "secure site", HttpUtil.authenticate("1234")) { _ =>
           extractRequest(action) { adminRequest =>
             countersHandler ! RtbActionsRouteRequestsCount

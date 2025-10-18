@@ -26,7 +26,13 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
     _replace(bucketId, bucketValues) match {
       case Success(values) =>
         val oldValues = values.map(v => "\"" + v + "\"").mkString("[", ",", "]")
-        val response = s"""{"bucketId":"$bucketId","oldValuesCount":"${values.length}","newValuesCount":"${bucketValues.size}","oldValues":$oldValues}"""
+        val response =
+          s"""{
+             |"bucketId": $bucketId,
+             |"oldValuesCount": ${values.length},
+             |"newValuesCount": ${bucketValues.size},
+             |"oldValues": $oldValues
+             |}""".stripMargin
         ActionSuccess(response)
 
       case Failure(e) =>
