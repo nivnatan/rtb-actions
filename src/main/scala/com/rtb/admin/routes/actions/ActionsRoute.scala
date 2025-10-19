@@ -1,5 +1,6 @@
 package com.rtb.admin.routes.actions
 
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
 import akka.http.scaladsl.server.Directives.{as, authenticateBasicAsync, entity, pathPrefix}
 import akka.http.scaladsl.server.{Directive1, Route}
 import akka.http.scaladsl.server.directives.BasicDirectives
@@ -15,6 +16,7 @@ import com.rtb.admin.routes.actions.constants.Actions.Action
 import com.rtb.admin.routes.actions.error.ActionErrorHandler
 import com.rtb.admin.routes.actions.handlers.ActionHandlers
 import com.rtb.admin.utils.counters.Counters.RtbActionsRouteRequestsCount
+
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -54,7 +56,12 @@ case class ActionsRoute(config: Config) extends ConfigSupport with ActionErrorHa
       case Success(ActionSuccess(payloadJson)) =>
         val body = s"""{"status":1,"data":$payloadJson}"""
         info(body)
-        complete(body)
+        complete(
+          HttpEntity(
+            ContentTypes.`application/json`,
+            body
+          )
+        )
 
       case Success(e: ActionError)  =>
         onError(e)

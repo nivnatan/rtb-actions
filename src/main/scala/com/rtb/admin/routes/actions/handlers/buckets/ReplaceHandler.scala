@@ -6,6 +6,8 @@ import com.rtb.admin.routes.actions.models.{ActionRequest, ActionResult, ActionS
 import com.common.utils.types.TypesUtil._
 import com.rtb.admin.routes.actions.constants.ActionErrors.BucketsErrorTypes.{InvalidBucketParameters, SqlBucketError}
 import com.rtb.admin.routes.actions.handlers.ActionHandler
+
+import com.rtb.admin.utils.counters.Counters.{RtbActionsBucketReplaceRequestsFailureCount, RtbActionsBucketReplaceRequestsSuccessCount}
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -25,6 +27,7 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
   private def replace(bucketId: Long, bucketValues: Set[String]): ActionResult = {
     _replace(bucketId, bucketValues) match {
       case Success(values) =>
+        countersHandler ! RtbActionsBucketReplaceRequestsSuccessCount
         val oldValues = values.map(v => "\"" + v + "\"").mkString("[", ",", "]")
         val response =
           s"""{
@@ -36,6 +39,7 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
         ActionSuccess(response)
 
       case Failure(e) =>
+        countersHandler ! RtbActionsBucketReplaceRequestsFailureCount
         SqlBucketError(e.getMessage)
     }
   }

@@ -7,6 +7,7 @@ import com.rtb.admin.routes.actions.models.{ActionRequest, ActionResult, ActionS
 import scala.util.{Failure, Success, Try}
 import com.common.utils.types.TypesUtil._
 import com.rtb.admin.routes.actions.handlers.ActionHandler
+import com.rtb.admin.utils.counters.Counters.{RtbActionsBucketAddRequestsFailureCount, RtbActionsBucketAddRequestsSuccessCount}
 
 /**
  * Created by Niv on 17/10/2025
@@ -27,6 +28,7 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
   private def replace(bucketId: Long, bucketValues: Set[String]): ActionResult = {
     _add(bucketId, bucketValues) match {
       case Success(AddOutcome(addedCount, totalCount, addedValues)) =>
+        countersHandler ! RtbActionsBucketAddRequestsSuccessCount
         val addedJson = addedValues.map(v => "\"" + v + "\"").mkString("[", ",", "]")
         val response =
           s"""{
@@ -38,6 +40,7 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
         ActionSuccess(response)
 
       case Failure(e) =>
+        countersHandler ! RtbActionsBucketAddRequestsFailureCount
         SqlBucketError(e.getMessage)
     }
   }

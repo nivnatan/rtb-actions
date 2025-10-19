@@ -1,6 +1,6 @@
 package com.rtb.admin.routes.actions.error
 
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.model.StatusCodes.BadRequest
 import akka.http.scaladsl.server.Directives.{complete, extractRequest}
 import akka.http.scaladsl.server.Route
@@ -27,7 +27,10 @@ trait ActionErrorHandler extends MyRouteErrorHandler with LoggingSupport {
     extractRequest { _ =>
       val body = s"""{"status":0,"errorId":"${err.id}","errorMsg":"${err.errorMsg}"}"""
       error(body)
-      complete(StatusCodes.custom(BadRequest.intValue, BadRequest.reason, body))
+      complete(
+        StatusCodes.BadRequest,
+        HttpEntity(ContentTypes.`application/json`, body)
+      )
     }
   }
 }
