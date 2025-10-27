@@ -20,12 +20,12 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
       bucketId     <- adminRequest.params.get("bucket_id").flatMap(_.toLongSafe)
       bucketValues = adminRequest.payload.replace("\r\n", "\n").replace("\r", "\n").split("\n").map(_.trim).map(_.toLowerCase).toSet
       if (bucketValues.nonEmpty)
-    } yield replace(bucketId, bucketValues))
+    } yield replace(bucketId, bucketValues, adminRequest))
       .getOrElse(InvalidBucketParameters)
   }
 
-  private def replace(bucketId: Long, bucketValues: Set[String]): ActionResult = {
-    _replace(bucketId, bucketValues) match {
+  private def replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): ActionResult = {
+    _replace(bucketId, bucketValues, adminRequest) match {
       case Success(values) =>
         countersHandler ! RtbActionsBucketReplaceRequestsSuccessCount
         val oldValues = values.map(v => "\"" + v + "\"").mkString("[", ",", "]")
@@ -44,8 +44,9 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
     }
   }
 
-  private def _replace(bucketId: Long, bucketValues: Set[String]): Try[Vector[String]] = {
-    rtbDb.withTransaction { conn =>
+  private def _replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): Try[Vector[String]] = {
+    val db = if(adminRequest.isDev) rtbDbDev else rtbDb
+    db.withTransaction { conn =>
       // 1) Snapshot existing values
       val oldValues = {
         val ps = conn.prepareStatement(

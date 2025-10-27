@@ -21,12 +21,12 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
       bucketId     <- adminRequest.params.get("bucket_id").flatMap(_.toLongSafe)
       bucketValues = adminRequest.payload.replace("\r\n", "\n").replace("\r", "\n").split("\n").map(_.trim).map(_.toLowerCase).toSet
       if (bucketValues.nonEmpty)
-    } yield replace(bucketId, bucketValues))
+    } yield replace(bucketId, bucketValues, adminRequest))
       .getOrElse(InvalidBucketParameters)
   }
 
-  private def replace(bucketId: Long, bucketValues: Set[String]): ActionResult = {
-    _add(bucketId, bucketValues) match {
+  private def replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): ActionResult = {
+    _add(bucketId, bucketValues, adminRequest) match {
       case Success(AddOutcome(addedCount, totalCount, addedValues)) =>
         countersHandler ! RtbActionsBucketAddRequestsSuccessCount
         val addedJson = addedValues.map(v => "\"" + v + "\"").mkString("[", ",", "]")
@@ -45,8 +45,9 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
     }
   }
 
-  private def _add(bucketId: Long, bucketValues: Set[String]): Try[AddOutcome] = {
-    rtbDb.withTransaction { conn =>
+  private def _add(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): Try[AddOutcome] = {
+    val db = if(adminRequest.isDev) rtbDbDev else rtbDb
+    db.withTransaction { conn =>
       val psInsert = conn.prepareStatement(
         "INSERT IGNORE INTO rtb_bucket_values (bucket_id, bucket_value) VALUES (?, ?)"
       )

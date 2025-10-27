@@ -14,10 +14,14 @@ case class ActionRequest(params: Map[String, String],
                         debug: Option[DebugContext]
                       ) {
 
+  def isDev: Boolean =
+    params.get("isdev").contains("1")
+
   override def toString: String = {
     "\n\nAdminRequest " + "{\n" +
       s"params=$params,\n" +
       s"action=$action,\n" +
+      s"isDev=$isDev,\n" +
       s"time=$time\n}\n\n"
   }
 }

@@ -4,7 +4,7 @@ import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
 import akka.http.scaladsl.server.Directives.{as, authenticateBasicAsync, entity, pathPrefix}
 import akka.http.scaladsl.server.{Directive1, Route}
 import akka.http.scaladsl.server.directives.BasicDirectives
-import com.common.routes.isDebug
+import com.common.routes.{extractParams, isDebug}
 import com.common.utils.http.HttpUtil
 import com.common.utils.time.MyLocalDateTime
 import com.rtb.admin.config.{Config, ConfigSupport}
@@ -16,6 +16,7 @@ import com.rtb.admin.routes.actions.constants.Actions.Action
 import com.rtb.admin.routes.actions.error.ActionErrorHandler
 import com.rtb.admin.routes.actions.handlers.ActionHandlers
 import com.rtb.admin.utils.counters.Counters.RtbActionsRouteRequestsCount
+
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -45,7 +46,8 @@ case class ActionsRoute(config: Config) extends ConfigSupport with ActionErrorHa
       payload     <- entity(as[String])
       action      <- Actions.getAction(action).map(provide).getOrElse(reject(UnknownActionType)): Directive1[Action]
       debug       <- isDebug
-    } yield ActionRequest(httpRequest.uri.query().toMap, MyLocalDateTime.now, payload, action, debug)
+      params      <- extractParams
+    } yield ActionRequest(params, MyLocalDateTime.now, payload, action, debug)
   }
 
   private def respond(request: ActionRequest, response: Try[ActionResult]): Route = {
