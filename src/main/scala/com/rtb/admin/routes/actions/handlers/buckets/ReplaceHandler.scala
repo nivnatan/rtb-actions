@@ -25,16 +25,16 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
   }
 
   private def replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): ActionResult = {
-    _replaceDelta(bucketId, bucketValues, adminRequest) match {
+    _replace(bucketId, bucketValues, adminRequest) match {
       case Success(values) =>
         countersHandler ! RtbActionsBucketReplaceRequestsSuccessCount
-        val oldValues = values.map(v => "\"" + v + "\"").mkString("[", ",", "]")
+        //val oldValues = values.map(v => "\"" + v + "\"").mkString("[", ",", "]")
+        val oldValuesCount = values
         val response =
           s"""{
              |"bucketId": $bucketId,
-             |"oldValuesCount": ${values.length},
+             |"oldValuesCount": $oldValuesCount,
              |"newValuesCount": ${bucketValues.size},
-             |"oldValues": $oldValues
              |}""".stripMargin
         ActionSuccess(response)
 
@@ -113,21 +113,21 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
     }
   }
 
-  private def _replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): Try[Vector[String]] = {
+  private def _replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): Try[Int] = {
     val db = if(adminRequest.isDev) rtbDbDev else rtbDb
     db.withTransaction { conn =>
       // 1) Snapshot existing values
-      val oldValues = {
+      val oldCount = {
         val ps = conn.prepareStatement(
-          "SELECT bucket_value FROM rtb_bucket_values WHERE bucket_id = ?"
+          "SELECT COUNT(*) FROM rtb_bucket_values WHERE bucket_id = ?"
         )
         try {
           ps.setLong(1, bucketId)
           val rs = ps.executeQuery()
-          val buf = Vector.newBuilder[String]
-          while (rs.next()) buf += rs.getString(1)
+          rs.next()
+          val count = rs.getInt(1)
           rs.close()
-          buf.result()
+          count
         } finally ps.close()
       }
 
@@ -159,7 +159,7 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
         } finally ps.close()
       }
 
-      oldValues
+      oldCount
     }
   }
 }
