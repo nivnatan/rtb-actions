@@ -142,20 +142,20 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
         } finally ps.close()
       }
 
-      // 3) Insert new set (batch)
-      val inserted = if (bucketValues.isEmpty) 0
-      else {
-        val ps = conn.prepareStatement(
-          "INSERT INTO rtb_bucket_values (bucket_id, bucket_value) VALUES (?, ?)"
-        )
+      // 3) single INSERT with many placeholders (replaces the batch)
+      if (bucketValues.nonEmpty) {
+        val values = bucketValues.iterator.map(HttpUtil.urlDecodeValue).toVector
+        val placeholders = values.map(_ => "(?, ?)").mkString(",")
+        val sql = s"INSERT INTO rtb_bucket_values (bucket_id, bucket_value) VALUES $placeholders"
+
+        val ps = conn.prepareStatement(sql)
         try {
-          bucketValues.foreach { v0 =>
-            val v = HttpUtil.urlDecodeValue(v0)
-            ps.setLong(1, bucketId)
-            ps.setString(2, v)
-            ps.addBatch()
+          var i = 1
+          values.foreach { v =>
+            ps.setLong(i, bucketId); i += 1
+            ps.setString(i, v);      i += 1
           }
-          ps.executeBatch().sum
+          ps.executeUpdate() // one round-trip
         } finally ps.close()
       }
 
