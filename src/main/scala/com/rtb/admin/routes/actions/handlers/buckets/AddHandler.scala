@@ -21,11 +21,11 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
       bucketId     <- adminRequest.params.get("bucket_id").flatMap(_.toLongSafe)
       bucketValues = adminRequest.payload.replace("\r\n", "\n").replace("\r", "\n").split("\n").map(_.trim).map(_.toLowerCase).toSet
       if (bucketValues.nonEmpty)
-    } yield replace(bucketId, bucketValues, adminRequest))
+    } yield add(bucketId, bucketValues, adminRequest))
       .getOrElse(InvalidBucketParameters)
   }
 
-  private def replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): ActionResult = {
+  private def add(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): ActionResult = {
     _add(bucketId, bucketValues, adminRequest) match {
       case Success(AddOutcome(addedCount, totalCount, addedValues)) =>
         countersHandler ! RtbActionsBucketAddRequestsSuccessCount

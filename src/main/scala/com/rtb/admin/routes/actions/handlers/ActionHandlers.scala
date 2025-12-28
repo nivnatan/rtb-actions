@@ -1,8 +1,8 @@
 package com.rtb.admin.routes.actions.handlers
 
 import com.rtb.admin.config.Config
-import com.rtb.admin.routes.actions.constants.Actions.{Action, BucketAdd, BucketReplace}
-import com.rtb.admin.routes.actions.handlers.buckets.{AddHandler, ReplaceHandler}
+import com.rtb.admin.routes.actions.constants.Actions.{Action, BucketAdd, BucketDelete, BucketReplace}
+import com.rtb.admin.routes.actions.handlers.buckets.{AddHandler, DeleteHandler, ReplaceHandler}
 import com.rtb.admin.routes.actions.models.{ActionRequest, ActionResult}
 
 /**
@@ -14,12 +14,14 @@ trait ActionHandler {
 
 class ActionHandlers(config: Config) {
 
-  private val bucketReplace = new ReplaceHandler(config)
-  private val bucketAdd     = new AddHandler(config)
+  private val bucketReplace    = new ReplaceHandler(config)
+  private val bucketAdd        = new AddHandler(config)
+  private val bucketDelete     = new DeleteHandler(config)
 
   def getHandler(action: Action): ActionHandler =
     action match {
       case BucketReplace => bucketReplace
       case BucketAdd     => bucketAdd
+      case BucketDelete  => bucketDelete
     }
 }

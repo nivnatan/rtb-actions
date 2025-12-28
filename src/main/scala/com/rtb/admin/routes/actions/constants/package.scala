@@ -1,7 +1,6 @@
 package com.rtb.admin.routes.actions
 
 import com.rtb.admin.routes.actions.models.ActionError
-
 import scala.language.implicitConversions
 
 /**
@@ -13,11 +12,13 @@ package object constants {
     sealed abstract class Action(val name: String)
     case object BucketReplace extends Action("bucket-replace")
     case object BucketAdd extends Action("bucket-add")
+    case object BucketDelete extends Action("bucket-delete")
 
     def getAction(name: String): Option[Action] = {
       name.toLowerCase match {
         case BucketReplace.name => Some(BucketReplace)
         case BucketAdd.name     => Some(BucketAdd)
+        case BucketDelete.name  => Some(BucketDelete)
         case _                  => None
       }
     }
