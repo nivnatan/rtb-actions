@@ -47,6 +47,14 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
   private def _replace(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): Try[Int] = {
     val db = if(adminRequest.isDev) rtbDbDev else rtbDb
     db.withTransaction { conn =>
+
+      // Disable bucket-touch triggers for this session (bulk op)
+      {
+        val ps = conn.prepareStatement("SET @rtb_skip_bucket_touch = 1")
+        try ps.execute() finally ps.close()
+      }
+
+
       // 1) Snapshot existing values
       val oldCount = {
         val ps = conn.prepareStatement(
@@ -87,6 +95,25 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
             ps.setString(i, v);      i += 1
           }
           ps.executeUpdate() // one round-trip
+        } finally ps.close()
+      }
+
+      // Re-enable triggers for this session (optional but good hygiene)
+      {
+        val ps = conn.prepareStatement("SET @rtb_skip_bucket_touch = 0")
+        try ps.execute() finally ps.close()
+      }
+
+      // Touch parent bucket ONCE so pollers reload (monotonic even within same second)
+      {
+        val ps = conn.prepareStatement(
+          "UPDATE rtb_buckets " +
+            "SET bucket_version = bucket_version + 1 " +
+            "WHERE id = ?"
+        )
+        try {
+          ps.setLong(1, bucketId)
+          ps.executeUpdate()
         } finally ps.close()
       }
 

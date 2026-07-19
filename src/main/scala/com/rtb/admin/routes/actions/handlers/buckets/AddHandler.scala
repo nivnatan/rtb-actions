@@ -48,6 +48,13 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
   private def _add(bucketId: Long, bucketValues: Set[String], adminRequest: ActionRequest): Try[AddOutcome] = {
     val db = if(adminRequest.isDev) rtbDbDev else rtbDb
     db.withTransaction { conn =>
+
+      // Disable bucket-touch triggers for this session (bulk op)
+      {
+        val ps = conn.prepareStatement("SET @rtb_skip_bucket_touch = 1")
+        try ps.execute() finally ps.close()
+      }
+
       val psInsert = conn.prepareStatement(
         "INSERT IGNORE INTO rtb_bucket_values (bucket_id, bucket_value) VALUES (?, ?)"
       )
@@ -73,6 +80,25 @@ class AddHandler(val config: Config) extends ActionHandler with ConfigSupport {
             rs.close()
             count
           } finally psCount.close()
+
+        // Re-enable triggers for this session (optional but good hygiene)
+        {
+          val ps = conn.prepareStatement("SET @rtb_skip_bucket_touch = 0")
+          try ps.execute() finally ps.close()
+        }
+
+        // Touch parent bucket ONCE so pollers reload (monotonic even within same second)
+        {
+          val ps = conn.prepareStatement(
+            "UPDATE rtb_buckets " +
+              "SET bucket_version = bucket_version + 1 " +
+              "WHERE id = ?"
+          )
+          try {
+            ps.setLong(1, bucketId)
+            ps.executeUpdate()
+          } finally ps.close()
+        }
 
         AddOutcome(insertedCount, totalCount, values)
       } finally psInsert.close()

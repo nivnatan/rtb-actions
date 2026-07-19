@@ -59,6 +59,12 @@ class DeleteHandler(val config: Config) extends ActionHandler with ConfigSupport
 
     db.withTransaction { conn =>
 
+      // Disable bucket-touch triggers for this session (bulk op)
+      {
+        val ps = conn.prepareStatement("SET @rtb_skip_bucket_touch = 1")
+        try ps.execute() finally ps.close()
+      }
+
       // 1) Count before
       val totalBefore: Int = {
         val ps = conn.prepareStatement(
@@ -97,6 +103,25 @@ class DeleteHandler(val config: Config) extends ActionHandler with ConfigSupport
             ps.executeUpdate() // rows actually deleted
           } finally ps.close()
         }
+
+      // Re-enable triggers for this session (optional but good hygiene)
+      {
+        val ps = conn.prepareStatement("SET @rtb_skip_bucket_touch = 0")
+        try ps.execute() finally ps.close()
+      }
+
+      // Touch parent bucket ONCE so pollers reload (monotonic even within same second)
+      {
+        val ps = conn.prepareStatement(
+          "UPDATE rtb_buckets " +
+            "SET bucket_version = bucket_version + 1 " +
+            "WHERE id = ?"
+        )
+        try {
+          ps.setLong(1, bucketId)
+          ps.executeUpdate()
+        } finally ps.close()
+      }
 
       // 3) Compute after (cheap, no extra query)
       val totalAfter = totalBefore - deletedCount
