@@ -13,13 +13,15 @@ package object constants {
     case object BucketReplace extends Action("bucket-replace")
     case object BucketAdd extends Action("bucket-add")
     case object BucketDelete extends Action("bucket-delete")
+    case object DruidPublisher extends Action("druid-pub")
 
     def getAction(name: String): Option[Action] = {
       name.toLowerCase match {
-        case BucketReplace.name => Some(BucketReplace)
-        case BucketAdd.name     => Some(BucketAdd)
-        case BucketDelete.name  => Some(BucketDelete)
-        case _                  => None
+        case BucketReplace.name       => Some(BucketReplace)
+        case BucketAdd.name           => Some(BucketAdd)
+        case BucketDelete.name        => Some(BucketDelete)
+        case DruidPublisher.name      => Some(DruidPublisher)
+        case _                        => None
       }
     }
   }

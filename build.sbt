@@ -42,7 +42,8 @@ lazy val root = (project in file(".")).dependsOn(common)
         "com.typesafe.akka" %% "akka-stream-kafka" % "2.0.7",
         "org.fluentd" % "fluent-logger" % "0.3.4",
         "com.aerospike" % "aerospike-client" % "5.1.11",
-        "io.netty" % "netty-all" % "4.1.68.Final"
+        "io.netty" % "netty-all" % "4.1.68.Final",
+        "com.iabtcf" % "iabtcf-decoder" % "2.0.10"
       )
     }
   )
