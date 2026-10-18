@@ -43,22 +43,27 @@ class DruidPublisher(val config: Config) extends ActionHandler with ConfigSuppor
 
   private def enrich(dataMap: Map[String, Any]): Map[String, Any] = {
     val sspContextData          = dataMap.get("ssp_id").map(_.toString).flatMap(dao.getRtbSspContextData)
-    val sspAdditionalDataMap    = Map(
-      "datetime"              -> Some(MyLocalDateTime.now.dateTimeUtc),
-      "rtb_ssp_id"            -> sspContextData.map(_.sspData.id),
-      "ssp_rtb_partner_id"    -> sspContextData.map(_.partnerData.id),
-      "ssp_bidder_id"         -> sspContextData.map(_.bidderData.id),
-      "ssp_sub_partner_id"    -> sspContextData.flatMap(_.subPartnerData.map(_.id)),
-    ).collect { case (k, Some(s)) if s != "" => k -> s }
 
-    val dspContextData          =  dataMap.get("dsp_id").map(_.toString).flatMap(dao.getRtbDspContextData)
-    val dspAdditionalDataMap    = Map(
-      "dsp_id"                -> dspContextData.map(_.dspData.id),
-      "dsp_rtb_partner_id"    -> dspContextData.map(_.partnerData.id),
-      "dsp_bidder_id"         -> dspContextData.map(_.bidderData.id),
-      "dsp_sub_partner_id"    -> dspContextData.flatMap(_.subPartnerData.map(_.id)),
-    ).collect { case (k, Some(s)) if s != "" => k -> s }
+    val sspAdditionalDataMap    = sspContextData.map { ctx =>
+      Map(
+        "rtb_ssp_id" -> sspContextData.map(_.sspData.id),
+        "ssp_rtb_partner_id" -> sspContextData.map(_.partnerData.id),
+        "ssp_bidder_id" -> sspContextData.map(_.bidderData.id),
+        "ssp_sub_partner_id" -> sspContextData.flatMap(_.subPartnerData.map(_.id)),
+      ).collect { case (k, Some(s)) if s != "" => k -> s }
+    }.getOrElse(Map.empty)
 
-    dataMap ++ sspAdditionalDataMap ++ dspAdditionalDataMap
+    val dspContextData          =  dataMap.get("dsp_endpoint_id").map(_.toString).flatMap(dao.getRtbDspContextData)
+
+    val dspAdditionalDataMap    = dspContextData.map { ctx =>
+      Map(
+        "dsp_id" -> dspContextData.map(_.dspData.id),
+        "dsp_rtb_partner_id" -> dspContextData.map(_.partnerData.id),
+        "dsp_bidder_id" -> dspContextData.map(_.bidderData.id),
+        "dsp_sub_partner_id" -> dspContextData.flatMap(_.subPartnerData.map(_.id)),
+      ).collect { case (k, Some(s)) if s != "" => k -> s }
+    }.getOrElse(Map.empty)
+
+    dataMap ++ sspAdditionalDataMap ++ dspAdditionalDataMap ++ Map("datetime" -> Some(MyLocalDateTime.now.dateTimeUtc))
   }
 }
