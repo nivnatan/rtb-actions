@@ -17,6 +17,8 @@ object Counters {
   case object RtbActionsBucketDeleteRequestsFailureCount        extends Counter("RtbActionsBucketDeleteRequestsFailureCount")
   case object RtbActionsDruidPublisherSuccessCount              extends Counter("RtbActionsDruidPublisherSuccessCount")
   case object RtbActionsDruidPublisherFailureCount              extends Counter("RtbActionsDruidPublisherFailureCount")
+  case object RtbUserActionsRouteErrorsCount                    extends Counter("RtbUserActionsRouteErrorsCount")
+  case object RtbUserActionsRouteRequestsCount                  extends Counter("RtbUserActionsRouteRequestsCount")
 
   def toSet: Set[Counter] =
     Set(
@@ -29,6 +31,8 @@ object Counters {
       RtbActionsBucketDeleteRequestsSuccessCount,
       RtbActionsBucketDeleteRequestsFailureCount,
       RtbActionsDruidPublisherSuccessCount,
-      RtbActionsDruidPublisherFailureCount
+      RtbActionsDruidPublisherFailureCount,
+      RtbUserActionsRouteErrorsCount,
+      RtbUserActionsRouteRequestsCount
     )
 }

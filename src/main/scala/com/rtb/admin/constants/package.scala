@@ -14,7 +14,7 @@ package object constants {
     case object Replace extends Operation
     case object Delete  extends Operation
 
-    def from(m: HttpMethod): Option[Operation] = m match {
+    def get(m: HttpMethod): Option[Operation] = m match {
       case HttpMethods.GET    => Some(Get)
       case HttpMethods.POST   => Some(Add)
       case HttpMethods.PUT    => Some(Replace)
