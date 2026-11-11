@@ -34,7 +34,7 @@ class ReplaceHandler(val config: Config) extends ActionHandler with ConfigSuppor
           s"""{
              |"bucketId": $bucketId,
              |"oldValuesCount": $oldValuesCount,
-             |"newValuesCount": ${bucketValues.size},
+             |"newValuesCount": ${bucketValues.size}
              |}""".stripMargin
         ActionSuccess(response)
 

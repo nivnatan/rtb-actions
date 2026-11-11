@@ -16,7 +16,6 @@ import com.rtb.admin.routes.actions.constants.Actions.Action
 import com.rtb.admin.routes.actions.error.ActionErrorHandler
 import com.rtb.admin.routes.actions.handlers.ActionHandlers
 import com.rtb.admin.utils.counters.Counters.RtbActionsRouteRequestsCount
-
 import scala.util.{Failure, Success, Try}
 
 /**

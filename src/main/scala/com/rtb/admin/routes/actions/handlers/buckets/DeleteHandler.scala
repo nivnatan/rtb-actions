@@ -39,7 +39,7 @@ class DeleteHandler(val config: Config) extends ActionHandler with ConfigSupport
              |"bucketId": $bucketId,
              |"oldValuesCount": $oldValuesCount,
              |"newValuesCount": $newValuesCount,
-             |"deletedCount": $deletedCount,
+             |"deletedCount": $deletedCount
              |}""".stripMargin
         ActionSuccess(response)
 

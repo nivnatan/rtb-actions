@@ -42,7 +42,7 @@ package object constants {
 
     object BucketsErrorTypes {
       sealed abstract class BucketErrorType(_id: String, errorMsg: String) extends ActionErrorType(s"BUCKET_${_id}", errorMsg)
-      case object InvalidBucketParameters extends BucketErrorType("INVALID_BUCKET_PARAMETERS", "dsa")
+      case object InvalidBucketParameters extends BucketErrorType("INVALID_BUCKET_PARAMETERS", "invalid bucket params")
       case class SqlBucketError(errMsg: String) extends BucketErrorType("SQL_BUCKET_ERROR", errMsg)
     }
   }
