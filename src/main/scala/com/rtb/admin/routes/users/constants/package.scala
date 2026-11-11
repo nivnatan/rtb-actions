@@ -1,5 +1,6 @@
 package com.rtb.admin.routes.users
 
+import akka.http.scaladsl.model.StatusCodes
 import com.rtb.admin.routes.users.models.UserActionError
 
 /**
@@ -20,17 +21,22 @@ package object constants {
   }
 
   object UserActionRouteErrors {
-    sealed abstract class UserActionRouteError(_id: String, errorMsg: String) extends UserActionError(s"ROUTE_${_id}", errorMsg)
-    case object InvalidCredentialsError extends UserActionRouteError("INVALID_CREDENTIALS", "invalid credentials")
-    case object InvalidActionError extends UserActionRouteError("INVALID_ACTION", "invalid action type")
+    sealed abstract class UserActionRouteError(_id: String, errorMsg: String, errorCode: Int) extends UserActionError(s"ROUTE_${_id}", errorMsg, StatusCodes.BadRequest, errorCode)
+    case object InvalidCredentialsError extends UserActionRouteError("INVALID_CREDENTIALS", "invalid credentials", 1)
+    case object InvalidActionError extends UserActionRouteError("INVALID_ACTION", "invalid action type", 2)
   }
 
   object UserActionRejections {
-    sealed abstract class UserActionRejection(_id: String, errorMsg: String) extends UserActionError(s"${_id}_REJECTION", errorMsg)
-    case object AuthenticationRejectionType extends UserActionRejection("AUTHENTICATION", "authentication failed")
+    sealed abstract class UserActionRejection(_id: String, errorMsg: String, errorCode: Int) extends UserActionError(s"${_id}_REJECTION", errorMsg, StatusCodes.BadRequest, errorCode)
+    case object AuthenticationRejectionType extends UserActionRejection("AUTHENTICATION", "authentication failed", 3)
   }
 
   object UserActionErrors {
-    case class UnknownError(error: String) extends UserActionError("UNKNOWN", error)
+    case class UnknownError(error: String) extends UserActionError("UNKNOWN", error, StatusCodes.InternalServerError, 4)
+  }
+
+  object UserActionBundlesErrors {
+    case object InvalidOperationError extends UserActionError("INVALID_OPERATION", "operation is invalid", StatusCodes.BadRequest, 5)
+    case object InitBundleRequestError extends UserActionError("INIT_BUNDLES_REQUEST", "init bundles request error", StatusCodes.BadRequest, 6)
   }
 }

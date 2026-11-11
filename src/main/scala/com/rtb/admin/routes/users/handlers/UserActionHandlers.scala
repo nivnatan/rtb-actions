@@ -9,7 +9,7 @@ import com.rtb.admin.routes.users.models.{UserActionRequest, UserActionResult}
  * Created by Niv on 10/11/2026
  */
 trait UserActionHandler {
-  def handle(userActionRequest: UserActionRequest): UserActionResult
+  def handle(userRequest: UserActionRequest): UserActionResult
 }
 
 class UserActionHandlers(config: Config) {

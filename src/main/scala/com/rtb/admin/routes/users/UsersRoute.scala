@@ -54,9 +54,11 @@ case class UsersRoute(config: Config) extends ConfigSupport with UsersErrorHandl
       action          <- UserActions.getAction(action).map(provide).getOrElse(reject(UserActionRouteErrors.InvalidActionError)): Directive1[UserAction]
       operation       <- extractMethod.map(Operations.get)
       password        <- provide(credentials.password)
+      dspData         <- provide(params.get("dsp_id").flatMap(dao.getDspDataPerPublicId))
+      sspData         <- provide(params.get("ssp_id").flatMap(dao.getSspDataPerPublicId))
       debug           <- isDebug
       payload         <- entity(as[String])
-    } yield UserActionRequest(params, time, payload, adminUserData, action, operation, password, debug)
+    } yield UserActionRequest(params, time, payload, adminUserData, action, operation, password, dspData, sspData, debug)
   }
 
   private def respond(request: UserActionRequest, response: Try[UserActionResult]): Route = {

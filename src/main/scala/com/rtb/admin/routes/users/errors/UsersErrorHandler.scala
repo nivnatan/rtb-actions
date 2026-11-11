@@ -27,18 +27,10 @@ trait UsersErrorHandler extends MyRouteErrorHandler with LoggingSupport {
     countersHandler ! RtbUserActionsRouteErrorsCount
     extractRequest { _ =>
       error(err.errorMsg)
-
-      val status = err match {
-        case _: UserActionRouteError  => StatusCodes.BadRequest
-        case _: UserActionRejection   => StatusCodes.BadRequest
-        case _                        => StatusCodes.InternalServerError
-
-      }
-
       complete(
         HttpResponse(
-          status = status,
-          headers = List(RawHeader("X-Error-Code", err.id))
+          status  = err.statusCode,
+          headers = List(RawHeader("X-Error-Code", err.errorCode.toString))
         )
       )
     }

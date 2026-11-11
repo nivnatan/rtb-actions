@@ -1,5 +1,6 @@
 package com.rtb.admin.routes.users.models
 
+import akka.http.scaladsl.model.StatusCode
 import akka.http.scaladsl.server.Rejection
 
 /**
@@ -7,4 +8,4 @@ import akka.http.scaladsl.server.Rejection
  */
 sealed trait UserActionResult
 case class UserActionSuccess(json: String) extends UserActionResult
-abstract class UserActionError(_id: String, val errorMsg: String) extends Throwable with Rejection with UserActionResult { def id: String = s"USER_ACTION_${_id}_ERROR" }
+abstract class UserActionError(_id: String, val errorMsg: String, val statusCode: StatusCode, val errorCode: Int) extends Throwable with Rejection with UserActionResult { def id: String = s"USER_ACTION_${_id}_ERROR" }
