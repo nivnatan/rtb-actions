@@ -38,5 +38,11 @@ package object constants {
   object UserActionBundlesErrors {
     case object InvalidOperationError extends UserActionError("INVALID_OPERATION", "operation is invalid", StatusCodes.BadRequest, 5)
     case object InitBundleRequestError extends UserActionError("INIT_BUNDLES_REQUEST", "init bundles request error", StatusCodes.BadRequest, 6)
+    case class BundleOperationFailedError(e: Throwable) extends UserActionError("OPERATION_FAILED", e.getMessage, StatusCodes.InternalServerError, 7)
+  }
+
+  object UserActionBundlesRejections {
+    sealed abstract class UserActionBundlesRejection(_id: String, errorMsg: String, errorCode: Int) extends UserActionError(s"${_id}_BUNDLES_REJECTION", errorMsg, StatusCodes.BadRequest, errorCode)
+    case object BundleListIsEmptyRequestRejectionType extends UserActionBundlesRejection("BUNDLES_LIST_EMPTY", "bundles list is empty", 8)
   }
 }

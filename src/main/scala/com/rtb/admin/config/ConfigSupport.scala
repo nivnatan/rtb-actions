@@ -9,6 +9,7 @@ import com.common.rtb.dao.{RtbDao, RtbDaoDatabase}
 import com.common.utils.counters.{CountersBuilder, CountersHandler, CountersListenerFluentd}
 import com.common.utils.http.models.HostData
 import com.rtb.admin.AdminServer
+import com.rtb.admin.service.buckets.BucketsService
 import com.rtb.admin.utils.counters.Counters
 import scala.concurrent.ExecutionContext
 
@@ -22,6 +23,7 @@ trait ConfigSupport {
   def dao: RtbDao = config.dao
   def rtbDb: Database = config.rtbDb
   def rtbDbDev: Database = config.rtbDbDev
+  def bucketsService: BucketsService = config.bucketsService
   implicit def system: ActorSystem = config.system
   implicit def ec: ExecutionContext = config.ec
   implicit def classLoader: ClassLoader = config.classLoader
@@ -34,4 +36,5 @@ case class Config(context: ActorContext)(implicit val system: ActorSystem, val e
   val dao: RtbDao                               = new RtbDaoDatabase(CommonConfiguration.DaoRefreshIntervalSeconds, countersHandler)
   val rtbDb: Database                           = new MySqlDatabase(RtbConfigurations.DbUrl, RtbConfigurations.DbUserName, RtbConfigurations.DbPassword, countersHandler)
   val rtbDbDev: Database                        = new MySqlDatabase("jdbc:mysql://172.16.0.21:8672/rtb?useUnicode=true&characterEncoding=utf8", RtbConfigurations.DbUserName, RtbConfigurations.DbPassword, countersHandler)
+  val bucketsService: BucketsService            = new BucketsService(rtbDb, rtbDbDev)
 }
